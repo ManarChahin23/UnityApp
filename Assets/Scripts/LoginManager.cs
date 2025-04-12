@@ -23,7 +23,7 @@ public class LoginManager : MonoBehaviour
         string email = emailInput.text;
         string password = passwordInput.text;
 
-        if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+        if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
         {
             feedbackText.text = "Vul zowel e-mail als wachtwoord in.";
             return;
@@ -39,7 +39,9 @@ public class LoginManager : MonoBehaviour
 
         if (response is WebRequestData<string> success)
         {
-            //Niet alles ingevuld stuur naar Gegevens invulscherm
+            PlayerPrefs.SetString("userId", success.Data);
+            PlayerPrefs.Save();
+
             SceneManager.LoadScene("EnvironmentsScene");
         }
         else if (response is WebRequestError error)
@@ -48,6 +50,9 @@ public class LoginManager : MonoBehaviour
             feedbackText.text = "Fout bij inloggen.";
         }
     }
+
+
+
 
     public void ToRegister()
     {

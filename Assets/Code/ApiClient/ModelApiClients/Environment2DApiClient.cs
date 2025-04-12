@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class Environment2DApiClient : MonoBehaviour
@@ -26,7 +27,7 @@ public class Environment2DApiClient : MonoBehaviour
 
     public async Awaitable<IWebRequestResponse> DeleteEnvironment(string environmentId)
     {
-        string route = "/api/environment2d" + environmentId;
+        string route = "/api/environment2d/" + environmentId;
         return await WebClient.Instance.SendDeleteRequest(route);
     }
 
@@ -57,5 +58,18 @@ public class Environment2DApiClient : MonoBehaviour
                 return webRequestResponse;
         }
     }
+
+    internal async Task<WebRequestData<List<Environment2D>>> ReadEnvironment2Ds(string userId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Awaitable<IWebRequestResponse> GetEnvironmentsByUserId(string userId)
+    {
+        string route = $"/api/environment2d/user/{userId}";
+        IWebRequestResponse response = await WebClient.Instance.SendGetRequest(route);
+        return ParseEnvironment2DListResponse(response);
+    }
+
 }
 
