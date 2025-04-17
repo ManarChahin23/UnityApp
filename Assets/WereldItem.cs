@@ -8,6 +8,7 @@ public class WereldItem : MonoBehaviour
 {
     public TMP_Text wereldNaamText;
     public Button openBtn;
+    public Button deleteBtn;
     public string environmentId;
 
 
@@ -17,6 +18,11 @@ public class WereldItem : MonoBehaviour
         {
             PlayerPrefs.SetString("selectedEnvironmentId", environmentId);
             SceneManager.LoadScene("CreateEnvironmentScene");
+        });
+
+        deleteBtn.onClick.AddListener(() =>
+        {
+            EnvironmentsListManager.Instance.DeleteEnvironment(environmentId);
         });
     }
 

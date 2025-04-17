@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class EnvironmentsListManager : MonoBehaviour
 {
@@ -56,5 +57,46 @@ public class EnvironmentsListManager : MonoBehaviour
 
 
     }
+
+    public void DeleteEnvironment(string id)
+    {
+        StartCoroutine(DeleteEnvironmentCoroutine(id));
+    }
+
+    private IEnumerator DeleteEnvironmentCoroutine(string id)
+    {
+        string url = $"https://avansict2191579.azurewebsites.net/api/environment2d/{id}";
+        UnityEngine.Networking.UnityWebRequest request = UnityEngine.Networking.UnityWebRequest.Delete(url);
+        request.SetRequestHeader("Authorization", $"Bearer {PlayerPrefs.GetString("accessToken")}");
+
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityEngine.Networking.UnityWebRequest.Result.Success)
+        {
+            Debug.Log("Wereld verwijderd!");
+            RefreshList();
+        }
+        else
+        {
+            Debug.LogError("Fout bij verwijderen: " + request.error);
+        }
+    }
+
+
+    public void RefreshList()
+    {
+        foreach (Transform child in listContainer)
+        {
+            if (child.GetComponent<WereldItem>() != null)
+            {
+                Destroy(child.gameObject);
+            }
+        }
+
+        environmentCount = 0;
+        Start(); // herlaad alles
+    }
+
+
 
 }
